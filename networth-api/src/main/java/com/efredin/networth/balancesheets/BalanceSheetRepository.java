@@ -69,7 +69,7 @@ public class BalanceSheetRepository  {
         if (sheet == null) {
             return null;
         }
-        return sheet.liabilities.get(sheet.assets.size() - 1);
+        return sheet.liabilities.get(sheet.liabilities.size() - 1);
     }
 
     /**
