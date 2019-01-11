@@ -35,6 +35,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.apache.logging.log4j:log4j-core")
     compile("org.apache.logging.log4j:log4j-api")
+    // compile("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
     testCompile("junit:junit")
     testCompile("org.mockito:mockito-core")
 	testCompile("org.springframework.boot:spring-boot-starter-test")
