@@ -1,0 +1,30 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "networth-api",
+                "projectName": "networth-api",
+                "workingDirectory": "c:\\Users\\efred\\dev\\efredin\\networth\\networth-api",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "networth-api",
+                "projectName": "networth-api",
+                "workingDirectory": "c:\\Users\\efred\\dev\\efredin\\networth\\networth-api",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}

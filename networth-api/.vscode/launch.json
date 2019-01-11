@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Application",
+            "request": "launch",
+            "mainClass": "com.efredin.networth.Application",
+            "projectName": "networth-api"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - NetworthApi",
+            "request": "launch",
+            "mainClass": "com.efredin.networth.api.NetworthApi",
+            "projectName": "networth-api"
+        }
+    ]
+}
