@@ -83,7 +83,7 @@ public class BalanceSheetController {
         @PathVariable("liabilityId") String assetId,
         @RequestBody Liability liability
     ) {
-        liability = this.repository.findAndUpdateLiabililty(sheetId, liability);
+        liability = this.repository.findAndUpdateLiability(sheetId, liability);
         if (liability == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }

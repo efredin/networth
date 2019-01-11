@@ -115,8 +115,8 @@ public class BalanceSheetRepository  {
      * @param liability Liability id
      * @return Updated liability object
      */
-    public Liability findAndUpdateLiabililty(String sheetId, Liability liability) {
-        logger.debug("findAndUpdateLiabililty for sheet: {}, asset: {}", sheetId, liability.id);
+    public Liability findAndUpdateLiability(String sheetId, Liability liability) {
+        logger.debug("findAndUpdateLiability for sheet: {}, asset: {}", sheetId, liability.id);
         BalanceSheet sheet = this.findAndUpdateEntry(sheetId, liability, LIABILITIES_KEY);
         if (sheet == null) {
             return null;

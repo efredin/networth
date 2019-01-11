@@ -247,7 +247,7 @@ public class BalanceSheetRepositoryTests {
             any())
         ).thenReturn(sheet);
 
-        Liability result = this.repository.findAndUpdateLiabililty(sheetId, liability);
+        Liability result = this.repository.findAndUpdateLiability(sheetId, liability);
 
         assertThat(result).isInstanceOf(Liability.class);
         assertThat(result).isEqualToComparingOnlyGivenFields(liability, "group", "label", "value");
@@ -275,7 +275,7 @@ public class BalanceSheetRepositoryTests {
             any())
         ).thenReturn(null);
 
-        Liability result = this.repository.findAndUpdateLiabililty(sheetId, liability);
+        Liability result = this.repository.findAndUpdateLiability(sheetId, liability);
 
         assertThat(result).isNull();
         verify(this.operations).findAndModify(
