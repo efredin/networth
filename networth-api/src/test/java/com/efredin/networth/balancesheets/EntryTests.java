@@ -12,18 +12,17 @@ public class EntryTests {
     public void entry_withoutValues() {
         Entry entry = new Entry();
         
-        assertThat(entry.group).isNull();
+        assertThat(entry.longTerm).isFalse();
         assertThat(entry.label).isNull();
     }
 
     @Test
     public void entry_withValues() {
-        String group = "awesome group";
         String label = "crushing defeat";
 
-        Entry entry = new Entry(group, label);
+        Entry entry = new Entry(label, true);
 
-        assertThat(entry.group).isEqualTo(group);
+        assertThat(entry.longTerm).isTrue();
         assertThat(entry.label).isEqualTo(label);
     }
 }

@@ -5,7 +5,7 @@ public class Liability extends Entry {
         super();
     }
 
-    public Liability(String group, String label) {
-        super(group, label);
+    public Liability(String label, boolean longTerm) {
+        super(label, longTerm);
     }
 }

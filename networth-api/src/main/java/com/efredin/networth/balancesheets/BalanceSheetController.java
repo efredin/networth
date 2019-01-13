@@ -2,6 +2,8 @@ package com.efredin.networth.balancesheets;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/balancesheets")
+@CrossOrigin(origins = "*")
 public class BalanceSheetController {
 
     @Autowired
@@ -88,5 +91,27 @@ public class BalanceSheetController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return liability;
+    }
+
+    @DeleteMapping("/{sheetId}/assets/{assetId}")
+    public void deleteAsset(
+        @PathVariable("sheetId") String sheetId,
+        @PathVariable("assetId") String assetId
+    ) {
+        boolean deleted = this.repository.removeAsset(sheetId, assetId);
+        if (!deleted) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{sheetId}/liabilities/{liabilityId}")
+    public void deleteLiability(
+        @PathVariable("sheetId") String sheetId,
+        @PathVariable("liabilityId") String liabilityId
+    ) {
+        boolean deleted = this.repository.removeLiability(sheetId, liabilityId);
+        if (!deleted) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 }

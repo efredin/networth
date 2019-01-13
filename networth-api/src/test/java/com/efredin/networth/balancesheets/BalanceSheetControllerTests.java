@@ -56,7 +56,7 @@ public class BalanceSheetControllerTests {
     @Test
     public void createAsset() {
         String sheetId = "sheet-it";
-        Asset asset = new Asset("group", "a.label");
+        Asset asset = new Asset("a.label", true);
         asset.value = 92.55;
 
         when(this.repository.createAsset(sheetId, asset)).thenReturn(asset);
@@ -70,7 +70,7 @@ public class BalanceSheetControllerTests {
     @Test
     public void createAsset_miss() {
         String sheetId = "sheet-it";
-        Asset asset = new Asset("group", "a.label");
+        Asset asset = new Asset("a.label", true);
         asset.value = 92.55;
 
         when(this.repository.createAsset(sheetId, asset)).thenReturn(null);
@@ -87,7 +87,7 @@ public class BalanceSheetControllerTests {
     @Test
     public void createLiability() {
         String sheetId = "sheet-it";
-        Liability liability = new Liability("group", "a.label");
+        Liability liability = new Liability("a.label", true);
         liability.value = 92.55;
 
         when(this.repository.createLiability(sheetId, liability)).thenReturn(liability);
@@ -101,7 +101,7 @@ public class BalanceSheetControllerTests {
     @Test
     public void createLiability_miss() {
         String sheetId = "sheet-it";
-        Liability liability = new Liability("group", "a.label");
+        Liability liability = new Liability("a.label", true);
         liability.value = 92.55;
 
         when(this.repository.createLiability(sheetId, liability)).thenReturn(null);
@@ -118,7 +118,7 @@ public class BalanceSheetControllerTests {
     @Test
     public void updateAsset() {
         String sheetId = "sheet-it";
-        Asset asset = new Asset("group", "a.label");
+        Asset asset = new Asset("a.label", true);
         asset.id = "asset-1234";
         asset.value = 92.55;
 
@@ -133,7 +133,7 @@ public class BalanceSheetControllerTests {
     @Test
     public void updateAsset_miss() {
         String sheetId = "sheet-it";
-        Asset asset = new Asset("group", "a.label");
+        Asset asset = new Asset("a.label", true);
         asset.id = "asset-1234";
         asset.value = 92.55;
 
@@ -151,7 +151,7 @@ public class BalanceSheetControllerTests {
     @Test
     public void updateLiability() {
         String sheetId = "sheet-it";
-        Liability liability = new Liability("group", "a.label");
+        Liability liability = new Liability("a.label", true);
         liability.id = "liability-1234";
         liability.value = 92.55;
 
@@ -166,7 +166,7 @@ public class BalanceSheetControllerTests {
     @Test
     public void updateLiability_miss() {
         String sheetId = "sheet-it";
-        Liability liability = new Liability("group", "a.label");
+        Liability liability = new Liability("a.label", true);
         liability.id = "liability-1234";
         liability.value = 92.55;
 

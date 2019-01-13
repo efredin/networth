@@ -2,17 +2,11 @@ package com.efredin.networth.balancesheets;
 
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.annotation.Id;
-
 public class Entry {
 
-    @Id
     public String id;
 
-    /** 
-     * Grouping of assets.
-     * */
-    public String group;
+    public boolean longTerm;
 
     /** Friendly label for this entry */
     public String label;
@@ -20,11 +14,12 @@ public class Entry {
     @NotNull
     public Double value;
 
-    public Entry() { }
+    public Entry() {
+    }
 
-    public Entry(String group, String label) {
+    public Entry(String label, boolean longTerm) {
         this();
-        this.group = group;
         this.label = label;
+        this.longTerm = longTerm;
     }
 }

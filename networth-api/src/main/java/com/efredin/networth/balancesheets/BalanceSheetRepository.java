@@ -1,7 +1,10 @@
 package com.efredin.networth.balancesheets;
 
+import com.mongodb.BasicDBObject;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -39,6 +42,12 @@ public class BalanceSheetRepository  {
      */
     public BalanceSheet save(BalanceSheet sheet) {
         logger.debug("save {}", sheet.id);
+        for (Entry asset:sheet.assets) {
+            asset.id = ObjectId.get().toHexString();
+        }
+        for (Entry liability:sheet.liabilities) {
+            liability.id = ObjectId.get().toHexString();
+        }
         return this.operations.save(sheet);
     }
 
@@ -80,6 +89,8 @@ public class BalanceSheetRepository  {
      * @return Created balance sheet
      */
     private BalanceSheet findAndCreateEntry(String sheetId, Entry entry, String key) {
+        entry.id = ObjectId.get().toHexString();
+
         Query query = Query.query(Criteria.where("_id").is(sheetId));
 
         // only return the updated entry array since there doesn't appear to be a way to
@@ -106,7 +117,7 @@ public class BalanceSheetRepository  {
         if (sheet == null) {
             return null;
         }
-        return this.getAssetById(sheet, asset.id);
+        return asset;
     }
 
     /**
@@ -121,7 +132,7 @@ public class BalanceSheetRepository  {
         if (sheet == null) {
             return null;
         }
-        return this.getLiabiiltyById(sheet, liability.id);
+        return liability;
     }
 
     /**
@@ -135,30 +146,37 @@ public class BalanceSheetRepository  {
         Query query = Query.query(Criteria.where("_id").is(sheetId)
             .andOperator(Criteria.where(key + "._id").is(entry.id)));
 
-        // only return the updated entry
-        query.fields().include(key + ".$");
-
         Update update = new Update().set(key + ".$", entry);
 
-        FindAndModifyOptions options = new FindAndModifyOptions()
-            .returnNew(true);
-        
-        return this.operations.findAndModify(query, update, options, BalanceSheet.class);
+        return this.operations.findAndModify(query, update, BalanceSheet.class);
     }
 
-    /** Find an asset by id from a balance sheet assets collection */
-    private Asset getAssetById(BalanceSheet sheet, String assetId) {
-        return sheet.assets.stream()
-            .filter(a -> a.id.equals(assetId))
-            .findFirst()
-            .get();
+    /**
+     * Remove an asset from a balance sheet.
+     * @param sheetId Balance sheet id
+     * @param assetId Asset id
+     * @return bool indicating the record was found and removed
+     */
+    public boolean removeAsset(String sheetId, String assetId) {
+        return this.removeEntry(sheetId, assetId, ASSETS_KEY);
     }
 
-    /** Find a liability by id from a balance sheet liabilities collection */
-    private Liability getLiabiiltyById(BalanceSheet sheet, String liabilityId) {
-        return sheet.liabilities.stream()
-            .filter(a -> a.id.equals(liabilityId))
-            .findFirst()
-            .get();
+    /**
+     * Remove a liability from a balance sheet.
+     * @param sheetId Balance sheet id
+     * @param liabilityId Liability id
+     * @return bool indicating the record was found and removed
+     */
+    public boolean removeLiability(String sheetId, String liabilityId) {
+        return this.removeEntry(sheetId, liabilityId, LIABILITIES_KEY);
+    }
+
+    private boolean removeEntry(String sheetId, String entryId, String key) {
+        Query query = Query.query(Criteria.where("id").is(sheetId));
+
+        Update update = new Update().pull(key, new BasicDBObject("_id", entryId));
+
+        BalanceSheet sheet = this.operations.findAndModify(query, update, BalanceSheet.class);
+        return sheet != null;
     }
 }

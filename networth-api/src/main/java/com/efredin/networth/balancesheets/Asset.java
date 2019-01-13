@@ -5,7 +5,7 @@ public class Asset extends Entry {
         super();
     }
 
-    public Asset(String group, String label) {
-        super(group, label);
+    public Asset(String label, boolean longTerm) {
+        super(label, longTerm);
     }
 }

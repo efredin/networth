@@ -56,9 +56,8 @@ public class BalanceSheetRepositoryTests {
     @Test
     public void createAsset() {
         String sheetId = "real-sheet-123";
-        String group = "i'm a real boy";
         String label = "gumdrop buttons";
-        Asset asset = new Asset(group, label);
+        Asset asset = new Asset(label, true);
         asset.value = 13.37;
         BalanceSheet sheet = new BalanceSheet();
         sheet.id = sheetId;
@@ -75,7 +74,7 @@ public class BalanceSheetRepositoryTests {
         Asset result = this.repository.createAsset(sheetId, asset);
 
         assertThat(result).isInstanceOf(Asset.class);
-        assertThat(result).isEqualToComparingOnlyGivenFields(asset, "group", "label", "value");
+        assertThat(result).isEqualToComparingOnlyGivenFields(asset, "label", "value");
         verify(this.operations).findAndModify(
             any(Query.class), 
             any(Update.class), 
@@ -87,9 +86,8 @@ public class BalanceSheetRepositoryTests {
     @Test
     public void createAsset_miss() {
         String sheetId = "real-sheet-123";
-        String group = "i'm a real boy";
         String label = "gumdrop buttons";
-        Asset asset = new Asset(group, label);
+        Asset asset = new Asset(label, true);
         asset.value = 13.37;
 
         when(this.operations.findAndModify(
@@ -113,9 +111,8 @@ public class BalanceSheetRepositoryTests {
     @Test
     public void createLiability() {
         String sheetId = "real-sheet-123";
-        String group = "i'm a real boy";
         String label = "gumdrop buttons";
-        Liability liability = new Liability(group, label);
+        Liability liability = new Liability(label, true);
         liability.value = 13.37;
         BalanceSheet sheet = new BalanceSheet();
         sheet.id = sheetId;
@@ -132,7 +129,7 @@ public class BalanceSheetRepositoryTests {
         Liability result = this.repository.createLiability(sheetId, liability);
 
         assertThat(result).isInstanceOf(Liability.class);
-        assertThat(result).isEqualToComparingOnlyGivenFields(liability, "group", "label", "value");
+        assertThat(result).isEqualToComparingOnlyGivenFields(liability, "label", "value");
         verify(this.operations).findAndModify(
             any(Query.class), 
             any(Update.class), 
@@ -144,9 +141,8 @@ public class BalanceSheetRepositoryTests {
     @Test
     public void createLiability_miss() {
         String sheetId = "real-sheet-123";
-        String group = "i'm a real boy";
         String label = "gumdrop buttons";
-        Liability liability = new Liability(group, label);
+        Liability liability = new Liability(label, true);
         liability.value = 13.37;
 
         when(this.operations.findAndModify(
@@ -170,9 +166,8 @@ public class BalanceSheetRepositoryTests {
     @Test
     public void findAndUpdateAsset() {
         String sheetId = "real-sheet-123";
-        String group = "i'm a real boy";
         String label = "gumdrop buttons";
-        Asset asset = new Asset(group, label);
+        Asset asset = new Asset(label, true);
         asset.id = "asset-999";
         asset.value = 13.37;
         BalanceSheet sheet = new BalanceSheet();
@@ -190,7 +185,7 @@ public class BalanceSheetRepositoryTests {
         Asset result = this.repository.findAndUpdateAsset(sheetId, asset);
 
         assertThat(result).isInstanceOf(Asset.class);
-        assertThat(result).isEqualToComparingOnlyGivenFields(asset, "group", "label", "value");
+        assertThat(result).isEqualToComparingOnlyGivenFields(asset, "label", "value");
         verify(this.operations).findAndModify(
             any(Query.class), 
             any(Update.class), 
@@ -202,9 +197,8 @@ public class BalanceSheetRepositoryTests {
     @Test
     public void findAndUpdateAsset_miss() {
         String sheetId = "real-sheet-123";
-        String group = "i'm a real boy";
         String label = "gumdrop buttons";
-        Asset asset = new Asset(group, label);
+        Asset asset = new Asset(label, true);
         asset.id = "asset-999";
         asset.value = 13.37;
 
@@ -229,9 +223,8 @@ public class BalanceSheetRepositoryTests {
     @Test
     public void findAndUpdateLiability() {
         String sheetId = "real-sheet-123";
-        String group = "i'm a real boy";
         String label = "gumdrop buttons";
-        Liability liability = new Liability(group, label);
+        Liability liability = new Liability(label, true);
         liability.id = "liability-333";
         liability.value = 13.37;
         BalanceSheet sheet = new BalanceSheet();
@@ -249,7 +242,7 @@ public class BalanceSheetRepositoryTests {
         Liability result = this.repository.findAndUpdateLiability(sheetId, liability);
 
         assertThat(result).isInstanceOf(Liability.class);
-        assertThat(result).isEqualToComparingOnlyGivenFields(liability, "group", "label", "value");
+        assertThat(result).isEqualToComparingOnlyGivenFields(liability, "label", "value");
         verify(this.operations).findAndModify(
             any(Query.class), 
             any(Update.class), 
@@ -263,7 +256,7 @@ public class BalanceSheetRepositoryTests {
         String sheetId = "real-sheet-123";
         String group = "i'm a real boy";
         String label = "gumdrop buttons";
-        Liability liability = new Liability(group, label);
+        Liability liability = new Liability(label, true);
         liability.id = "liability-333";
         liability.value = 13.37;
 
