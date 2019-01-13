@@ -1,6 +1,7 @@
 import React from 'react';
 import { Entry } from './state';
 import { Table, Form } from 'semantic-ui-react';
+import NumberFormat from 'react-number-format';
 import * as State from './state';
 
 export interface EntryProps {
@@ -26,11 +27,17 @@ export default (props: EntryProps) => {
       <Table.Cell>
         <Form.Input
           type="text"
-          value={value}
-          placeholder="0.00"
           className="value"
           fluid
-          onChange={(e, data) => updateEntry({ ...entry, value: data.value })}
+          children={
+            <NumberFormat
+              value={value}
+              placeholder="0.00" 
+              thousandSeparator={true}
+              prefix="$" 
+              onValueChange={(data) => updateEntry({ ...entry, value: data.value })}
+            />
+          }
         />
       </Table.Cell>
     </Table.Row>
