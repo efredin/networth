@@ -1,0 +1,49 @@
+{
+  "name": "networth-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "clean": "rimraf ./dist",
+    "lint": "tslint --project ./tslint.json",
+    "start": "webpack-dev-server --mode development --hot --port 8000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eric Fredin <efredin@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^23.3.11",
+    "@types/react": "^16.7.18",
+    "@types/react-redux": "^6.0.12",
+    "@types/redux": "^3.6.0",
+    "@types/webpack": "^4.4.22",
+    "css-loader": "^2.1.0",
+    "file-loader": "^3.0.1",
+    "html-webpack-plugin": "^3.2.0",
+    "jest": "^23.6.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
+    "rimraf": "^2.6.3",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^0.23.1",
+    "ts-jest": "^23.10.5",
+    "ts-loader": "^5.3.2",
+    "tslint": "^5.12.0",
+    "tslint-loader": "^3.5.4",
+    "typescript": "^3.2.2",
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.2.0",
+    "webpack-dev-server": "^3.1.14"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
+    "redux-saga": "^0.16.2",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.84.0"
+  }
+}
