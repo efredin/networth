@@ -13,7 +13,7 @@ export default (props: EntryProps) => {
   const { updateEntry, entry } = props;
   const { label, value } = entry;
   return (
-    <Table.Row>
+    <Table.Row className="entry">
       <Table.Cell>
         <Form.Input
           type="text"

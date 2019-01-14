@@ -101,8 +101,8 @@ export class BalanceSheet extends React.Component<BalanceSheetProps> {
               </Table.Header>
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>Currency</Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell width={10}>Currency</Table.Cell>
+                  <Table.Cell width={6}>
                     <Dropdown
                       fluid
                       search
