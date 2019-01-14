@@ -1,5 +1,5 @@
 import { takeEvery, all, put, takeLatest, call, select } from 'redux-saga/effects';
-import { 
+import {
   Actions, 
   InitAction, 
   CreateAction, 
@@ -12,9 +12,10 @@ import {
   create,
   load,
   set,
-  setEntry
+  setEntry,
+  ConvertAction
 } from './state';
-import State from '../State';
+import RootState from '../State';
 import axios, { AxiosResponse } from 'axios';
 
 // todo: normally this would be loaded via json on app initialization
@@ -45,7 +46,7 @@ function* handleLoad(action: LoadAction) {
 
 /** Create a new balance sheet */
 function* handleCreate(action: CreateAction) {
-  const currency = yield select((state: State) => state.balanceSheets.currency) || 'CAD';
+  const currency = yield select((state: RootState) => state.balanceSheets.currency) || 'CAD';
   const url = `//${env.apiFqdn}/balancesheets`;
   const response: AxiosResponse<any> = yield call([axios, 'post'], url, {
     currency,
@@ -112,6 +113,12 @@ function* handleDeleteEntry(action: DeleteEntryAction) {
   yield call([axios, 'delete'], url);
 }
 
+function* handleConvert(action: ConvertAction) {
+  const url = `//${env.apiFqdn}/balancesheets/${action.balanceSheetId}/convert/${action.currency}`;
+  const response: AxiosResponse<any> = yield call([axios, 'put'], url);
+  yield put(set(response.data));
+}
+
 export default function*() {
   yield all([
     takeEvery(Actions.Init, handleInit),
@@ -119,6 +126,7 @@ export default function*() {
     takeLatest(Actions.Create, handleCreate),
     takeEvery(Actions.CreateEntry, handleCreateEntry),
     takeLatest(Actions.UpdateEntry, handleUpdateEntry),
-    takeEvery(Actions.DeleteEntry, handleDeleteEntry)
+    takeEvery(Actions.DeleteEntry, handleDeleteEntry),
+    takeLatest(Actions.Convert, handleConvert)
   ]);
 }

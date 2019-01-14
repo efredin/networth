@@ -29,7 +29,8 @@ export enum Actions {
   SetEntry = '/balanceSheets/setEntry',
   CreateEntry = '/balanceSheetse/createEntry',
   UpdateEntry = '/balanceSheets/updateEntry',
-  DeleteEntry = '/balanceSheets/deleteEntry'
+  DeleteEntry = '/balanceSheets/deleteEntry',
+  Convert = '/balanceSheets/convert'
 }
 
 export interface InitAction {
@@ -129,6 +130,19 @@ export function deleteEntry(balanceSheetId: string, entryId: string, entryType: 
   };
 }
 
+export interface ConvertAction {
+  type: Actions.Convert;
+  balanceSheetId: string;
+  currency: string;
+}
+export function convert(balanceSheetId: string, currency: string): ConvertAction {
+  return {
+    type: Actions.Convert,
+    balanceSheetId,
+    currency
+  };
+}
+
 export function reducer(state: BalanceSheet = initialState, action: Action) {
   const sheet = { ...state };
   let entry: Entry;
@@ -176,6 +190,10 @@ export function reducer(state: BalanceSheet = initialState, action: Action) {
         ];
       }
       return sheet;
+
+    case Actions.Convert:
+      const convertAction = action as ConvertAction;
+      return { ...state, currency: convertAction.currency };
 
     default:
       return state;

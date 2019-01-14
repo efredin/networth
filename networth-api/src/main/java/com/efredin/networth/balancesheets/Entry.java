@@ -12,9 +12,10 @@ public class Entry {
     public String label;
     
     @NotNull
-    public Double value;
+    public double value;
 
     public Entry() {
+        this.value = 0d;
     }
 
     public Entry(String label, boolean longTerm) {

@@ -1,13 +1,15 @@
 import React from 'react';
-import { Grid, Table, Segment, Header, Button } from 'semantic-ui-react';
+import { Grid, Table, Segment, Header, Button, Dropdown } from 'semantic-ui-react';
 import { Dispatch, AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import EntryGroup from './EntryGroup';
 import NumberFormat from 'react-number-format';
 import * as State from './state';
+import * as Currencies from '../Currencies';
 import './BalanceSheet.less';
 
 export interface BalanceSheetStateProps extends State.BalanceSheet {
+  currencies: Currencies.state.CurrencyList;
 }
 
 export interface BalanceSheetDispatchProps {
@@ -15,6 +17,7 @@ export interface BalanceSheetDispatchProps {
   createEntry: (balanceSheetId: string, entry: Partial<State.Entry>, entryType: State.EntryType) => void;
   updateEntry: (balanceSheetId: string, entry: State.Entry, entryType: State.EntryType) => void;
   deleteEntry: (balanceSheetId: string, entryId: string, entryType: State.EntryType) => void;
+  convert: (balanceSheetId: string, currency: string) => void;
 }
 
 export interface BalanceSheetProps extends BalanceSheetStateProps, BalanceSheetDispatchProps {
@@ -40,7 +43,7 @@ export class BalanceSheet extends React.Component<BalanceSheetProps> {
   }
 
   render() {
-    const { id, create, assets, liabilities } = this.props;
+    const { id, create, assets, liabilities, currency, convert } = this.props;
 
     if (!id) {
       return <Segment basic loading={true} />;
@@ -56,6 +59,19 @@ export class BalanceSheet extends React.Component<BalanceSheetProps> {
     const totalAssets = sum(assets);
     const totalLiabilities = sum(liabilities);
     const netWorth = totalAssets - totalLiabilities;
+
+    // map currencies from object to key-value-text tuples
+    // for rendering with semantic dropdown
+    let currencies: { key: string, text: string, value: string }[] = [];
+    for (let key in this.props.currencies) {
+      if (this.props.currencies[key]) {
+        currencies.push({ 
+          key, 
+          text: `${key} - ${this.props.currencies[key]}`,
+          value: key
+        });
+      }
+    }
 
     return (
       <Grid container columns="equal" stackable className="balanceSheet">
@@ -83,6 +99,21 @@ export class BalanceSheet extends React.Component<BalanceSheetProps> {
                   </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Currency</Table.Cell>
+                  <Table.Cell>
+                    <Dropdown
+                      fluid
+                      search
+                      selection
+                      options={currencies}
+                      value={currency}
+                      onChange={(e, data) => convert(id, data.value as string)}
+                    />
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
             </Table>
           </Grid.Column>
         </Grid.Row>
@@ -171,11 +202,17 @@ export class BalanceSheet extends React.Component<BalanceSheetProps> {
 }
 
 export default connect<BalanceSheetStateProps, BalanceSheetDispatchProps>(
-  (state: any) => state.balanceSheets,
+  (state: any) => {
+    return {
+      ...state.balanceSheets,
+      currencies: state.currencies
+    };
+  },
   (dispatch: Dispatch<AnyAction>) => ({
     create: () => dispatch(State.create()),
     createEntry: (balanceSheetId: string, entry: Partial<State.Entry>, entryType: State.EntryType) => dispatch(State.createEntry(balanceSheetId, entry, entryType)),
     updateEntry: (balanceSheetId: string, entry: State.Entry, entryType: State.EntryType) => dispatch(State.updateEntry(balanceSheetId, entry, entryType)),
-    deleteEntry: (balanceSheetId: string, entryId: string, entryType: State.EntryType) => dispatch(State.deleteEntry(balanceSheetId, entryId, entryType))
+    deleteEntry: (balanceSheetId: string, entryId: string, entryType: State.EntryType) => dispatch(State.deleteEntry(balanceSheetId, entryId, entryType)),
+    convert: (balanceSheetId: string, currency: string) => dispatch(State.convert(balanceSheetId, currency))
   })
 )(BalanceSheet);

@@ -1,5 +1,7 @@
-import { state } from './BalanceSheets';
+import { state as bs } from './BalanceSheets';
+import { state as cur } from './Currencies';
 
 export default interface State {
-  balanceSheets: state.BalanceSheet;
+  balanceSheets: bs.BalanceSheet;
+  currencies: cur.CurrencyState;
 }
