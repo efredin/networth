@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Table, Segment, Header, Button, Dropdown } from 'semantic-ui-react';
+import { Grid, Table, Segment, Header, Button, Dropdown, Icon } from 'semantic-ui-react';
 import { Dispatch, AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import EntryGroup from './EntryGroup';
@@ -8,8 +8,13 @@ import * as State from './state';
 import * as Currencies from '../Currencies';
 import './BalanceSheet.less';
 
-export interface BalanceSheetStateProps extends State.BalanceSheet {
+export interface BalanceSheetState {
+  isChanged: boolean;
+}
+
+export interface BalanceSheetStateProps extends State.BalanceSheetState {
   currencies: Currencies.state.CurrencyList;
+  pendingOperationCount: number;
 }
 
 export interface BalanceSheetDispatchProps {
@@ -27,7 +32,12 @@ const sum = (entries: State.Entry[]) => entries
       .map(e => parseFloat(e.value) || 0)
       .reduce((s, v) => s + v, 0);
 
-export class BalanceSheet extends React.Component<BalanceSheetProps> {
+export class BalanceSheet extends React.Component<BalanceSheetProps, BalanceSheetState> {
+
+  constructor(props: BalanceSheetProps, context: any) {
+    super (props, context);
+    this.state = { isChanged: false };
+  }
 
   createOrUpdateEntry = (entry: State.Entry, entryType: State.EntryType) => {
     const { id, createEntry, updateEntry, deleteEntry } = this.props;
@@ -40,6 +50,7 @@ export class BalanceSheet extends React.Component<BalanceSheetProps> {
     } else {
       createEntry(id, entry, entryType);
     }
+    this.setState({ isChanged: true });
   }
 
   render() {
@@ -76,8 +87,11 @@ export class BalanceSheet extends React.Component<BalanceSheetProps> {
     return (
       <Grid container columns="equal" stackable className="balanceSheet">
         <Grid.Row>
-          <Grid.Column>
+          <Grid.Column width={12}>
             <Header as="h1">Net Worth Calculator</Header>
+          </Grid.Column>
+          <Grid.Column textAlign="right" verticalAlign="bottom" width={4}>
+            {this.renderSaveIndicator()}
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
@@ -93,7 +107,6 @@ export class BalanceSheet extends React.Component<BalanceSheetProps> {
                       decimalScale={2} 
                       fixedDecimalScale={true} 
                       thousandSeparator={true}
-                      prefix="$"
                       color={netWorth >= 0 ? 'green' : 'red'}
                     />
                   </Table.HeaderCell>
@@ -147,7 +160,6 @@ export class BalanceSheet extends React.Component<BalanceSheetProps> {
                       decimalScale={2} 
                       fixedDecimalScale={true} 
                       thousandSeparator={true}
-                      prefix="$" 
                     />
                   </Table.Cell>
                 </Table.Row>
@@ -198,6 +210,29 @@ export class BalanceSheet extends React.Component<BalanceSheetProps> {
         </Grid.Row>
       </Grid>
     );
+  }
+
+  renderSaveIndicator() {
+    const { isChanged } = this.state;
+    const { pendingOperationCount } = this.props;
+
+    if (!isChanged) {
+      return null;
+    }
+
+    if (pendingOperationCount > 0) {
+      return (
+        <span>
+          <Icon loading name="asterisk" color="grey" /> Saving changes
+        </span>
+      );
+    } else {
+      return (
+        <span>
+          <Icon name="check circle outline" color="green" /> All changed saved
+        </span>
+      );
+    }
   }
 }
 

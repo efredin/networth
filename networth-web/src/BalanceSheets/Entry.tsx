@@ -34,7 +34,6 @@ export default (props: EntryProps) => {
               value={value}
               placeholder="0.00" 
               thousandSeparator={true}
-              prefix="$" 
               onValueChange={(data) => updateEntry({ ...entry, value: data.value })}
             />
           }

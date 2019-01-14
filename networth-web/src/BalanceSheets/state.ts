@@ -1,10 +1,11 @@
 import { Action } from 'redux';
 
-export interface BalanceSheet {
+export interface BalanceSheetState {
   id: string;
   currency: string;
   assets: Entry[];
   liabilities: Entry[];
+  pendingOperationCount: number;
 }
 
 export interface Entry {
@@ -14,11 +15,12 @@ export interface Entry {
   value: string;
 }
 
-const initialState: BalanceSheet = {
+const initialState: BalanceSheetState = {
   id: undefined,
   currency: 'CAD',
   assets: [],
-  liabilities: []
+  liabilities: [],
+  pendingOperationCount: 0
 };
 
 export enum Actions {
@@ -26,10 +28,12 @@ export enum Actions {
   Set = '/balanceSheets/set',
   Load = '/balanceSheets/load',
   Create = '/balanceSheets/create',
-  SetEntry = '/balanceSheets/setEntry',
-  CreateEntry = '/balanceSheetse/createEntry',
-  UpdateEntry = '/balanceSheets/updateEntry',
-  DeleteEntry = '/balanceSheets/deleteEntry',
+  SetEntry = '/balanceSheets/entry/set',
+  CreateEntry = '/balanceSheetse/entry/create',
+  UpdateEntry = '/balanceSheets/entry/update',
+  DeleteEntry = '/balanceSheets/entry/delete',
+  IncrementOperationCount = '/balanceSheets/operations/increment',
+  DecrementOperationCount = '/balanceSheets/operations/decrement',
   Convert = '/balanceSheets/convert'
 }
 
@@ -42,9 +46,9 @@ export function init(): InitAction {
 
 export interface SetAction {
   type: Actions.Set;
-  balanceSheet: BalanceSheet;
+  balanceSheet: BalanceSheetState;
 }
-export function set(balanceSheet: BalanceSheet): SetAction {
+export function set(balanceSheet: BalanceSheetState): SetAction {
   return {
     type: Actions.Set,
     balanceSheet
@@ -130,6 +134,20 @@ export function deleteEntry(balanceSheetId: string, entryId: string, entryType: 
   };
 }
 
+export interface IncrementOperationCountAction {
+  type: Actions.IncrementOperationCount;
+}
+export function incrementOperationCount(): IncrementOperationCountAction {
+  return { type: Actions.IncrementOperationCount };
+}
+
+export interface DecrementOperationCountAction {
+  type: Actions.DecrementOperationCount;
+}
+export function decrementOperationCount(): DecrementOperationCountAction {
+  return { type: Actions.DecrementOperationCount };
+}
+
 export interface ConvertAction {
   type: Actions.Convert;
   balanceSheetId: string;
@@ -143,7 +161,7 @@ export function convert(balanceSheetId: string, currency: string): ConvertAction
   };
 }
 
-export function reducer(state: BalanceSheet = initialState, action: Action) {
+export function reducer(state: BalanceSheetState = initialState, action: Action) {
   const sheet = { ...state };
   let entry: Entry;
   let resource: string;
@@ -190,6 +208,12 @@ export function reducer(state: BalanceSheet = initialState, action: Action) {
         ];
       }
       return sheet;
+
+    case Actions.IncrementOperationCount:
+      return { ...state, pendingOperationCount: state.pendingOperationCount + 1 };
+
+    case Actions.DecrementOperationCount:
+      return { ...state, pendingOperationCount: state.pendingOperationCount - 1 }; 
 
     case Actions.Convert:
       const convertAction = action as ConvertAction;

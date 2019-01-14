@@ -13,7 +13,9 @@ import {
   load,
   set,
   setEntry,
-  ConvertAction
+  ConvertAction,
+  incrementOperationCount,
+  decrementOperationCount
 } from './state';
 import RootState from '../State';
 import axios, { AxiosResponse } from 'axios';
@@ -83,6 +85,7 @@ function* handleCreate(action: CreateAction) {
 /** Create a new balance sheet entry (asset / liability) */
 function* handleCreateEntry(action: CreateEntryAction) {
   yield put(setEntry(action.entry as Entry, action.entryType));
+  yield put(incrementOperationCount());
 
   const resource = getEntry(action.entryType);
   const url = `//${env.apiFqdn}/balancesheets/${action.balanceSheetId}/${resource}`;
@@ -93,30 +96,37 @@ function* handleCreateEntry(action: CreateEntryAction) {
     ...action.entry
   });
   yield put(setEntry(response.data, action.entryType));
+  yield put(decrementOperationCount());
 }
 
 /** Update an existing balance sheet entry */
 function* handleUpdateEntry(action: UpdateEntryAction) {
   yield put(setEntry(action.entry, action.entryType));
-
+  
   // delay combined with takeLatest is effectively debounce
   yield call(delay, 1000);
+  yield put(incrementOperationCount());
 
   const resource = getEntry(action.entryType);
   const url = `//${env.apiFqdn}/balancesheets/${action.balanceSheetId}/${resource}/${action.entry.id}`;
   yield call([axios, 'put'], url, action.entry);
+  yield put(decrementOperationCount());
 }
 
 function* handleDeleteEntry(action: DeleteEntryAction) {
+  yield put(incrementOperationCount());
   const resource = getEntry(action.entryType);
   const url = `//${env.apiFqdn}/balancesheets/${action.balanceSheetId}/${resource}/${action.entryId}`;
   yield call([axios, 'delete'], url);
+  yield put(decrementOperationCount());
 }
 
 function* handleConvert(action: ConvertAction) {
+  yield put(incrementOperationCount());
   const url = `//${env.apiFqdn}/balancesheets/${action.balanceSheetId}/convert/${action.currency}`;
   const response: AxiosResponse<any> = yield call([axios, 'put'], url);
   yield put(set(response.data));
+  yield put(decrementOperationCount());
 }
 
 export default function*() {
