@@ -18,7 +18,7 @@ export default (props: EntryProps) => {
         <Form.Input
           type="text"
           value={label}
-          placeholder="Label"
+          placeholder="Add another"
           className="label"
           fluid
           onChange={(e, data) => updateEntry({ ...entry, label: data.value })}
