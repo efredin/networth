@@ -24,7 +24,7 @@ public class CurrencyController {
   public Map<String, String> getCurrencies() {
     try {
       return this.currencyService.getCurrencies();
-    } catch (Exception e) {
+    } catch (CurrencyException e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

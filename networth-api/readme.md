@@ -10,18 +10,17 @@ This project represents the API component of the net worth case study.
 | FIXER_APIKEY | null | Fixer API key |
 
 ## Running
-On Windows
 ```
-gradlew.bat bootRun
+./gradlew bootRun
 ```
-On Linux
+
+## Tests
 ```
-./graldew bootRun
+./gradlew test jacocoTestReport
 ```
 
 ## External Dependencies
 This service relies on fixer for currency data.  An API key can be requested at https://fixer.io/
 
 ## TODO:
-* logging
 * async

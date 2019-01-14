@@ -44,12 +44,18 @@ public class BalanceSheetRepositoryTests {
         BalanceSheet sheet = new BalanceSheet();
         sheet.id = "test-999";
         sheet.currency = "CAD";
+        Asset asset = new Asset();
+        sheet.assets.add(asset);
+        Liability liability = new Liability();
+        sheet.liabilities.add(liability);
 
         when(this.operations.save(sheet)).thenReturn(sheet);
 
         BalanceSheet result = this.repository.save(sheet);
 
         assertThat(result).isInstanceOf(BalanceSheet.class);
+        assertThat(asset.id).isNotNull();
+        assertThat(liability.id).isNotNull();
         verify(this.operations).save(sheet);
     }
 
@@ -178,7 +184,6 @@ public class BalanceSheetRepositoryTests {
         when(this.operations.findAndModify(
             any(Query.class), 
             any(Update.class), 
-            any(FindAndModifyOptions.class), 
             any())
         ).thenReturn(sheet);
 
@@ -189,7 +194,6 @@ public class BalanceSheetRepositoryTests {
         verify(this.operations).findAndModify(
             any(Query.class), 
             any(Update.class), 
-            any(FindAndModifyOptions.class), 
             any()
         );
     }
@@ -205,7 +209,6 @@ public class BalanceSheetRepositoryTests {
         when(this.operations.findAndModify(
             any(Query.class), 
             any(Update.class), 
-            any(FindAndModifyOptions.class), 
             any())
         ).thenReturn(null);
 
@@ -215,7 +218,6 @@ public class BalanceSheetRepositoryTests {
         verify(this.operations).findAndModify(
             any(Query.class), 
             any(Update.class), 
-            any(FindAndModifyOptions.class), 
             any()
         );
     }
@@ -235,7 +237,6 @@ public class BalanceSheetRepositoryTests {
         when(this.operations.findAndModify(
             any(Query.class), 
             any(Update.class), 
-            any(FindAndModifyOptions.class), 
             any())
         ).thenReturn(sheet);
 
@@ -246,7 +247,6 @@ public class BalanceSheetRepositoryTests {
         verify(this.operations).findAndModify(
             any(Query.class), 
             any(Update.class), 
-            any(FindAndModifyOptions.class), 
             any()
         );
     }
@@ -254,7 +254,6 @@ public class BalanceSheetRepositoryTests {
     @Test
     public void findAndUpdateLiability_miss() {
         String sheetId = "real-sheet-123";
-        String group = "i'm a real boy";
         String label = "gumdrop buttons";
         Liability liability = new Liability(label, true);
         liability.id = "liability-333";
@@ -263,7 +262,6 @@ public class BalanceSheetRepositoryTests {
         when(this.operations.findAndModify(
             any(Query.class), 
             any(Update.class), 
-            any(FindAndModifyOptions.class), 
             any())
         ).thenReturn(null);
 
@@ -273,7 +271,102 @@ public class BalanceSheetRepositoryTests {
         verify(this.operations).findAndModify(
             any(Query.class), 
             any(Update.class), 
-            any(FindAndModifyOptions.class), 
+            any()
+        );
+    }
+
+    @Test
+    public void removeAsset() {
+        String sheetId = "real-sheet-123";
+        String assetId = "asset-912";
+        BalanceSheet sheet = new BalanceSheet();
+        sheet.id = sheetId;
+        sheet.currency = "CAD";
+
+        when(this.operations.findAndModify(
+            any(Query.class), 
+            any(Update.class), 
+            any())
+        ).thenReturn(sheet);
+
+        boolean result = this.repository.removeAsset(sheetId, assetId);
+
+        assertThat(result).isTrue();
+        verify(this.operations).findAndModify(
+            any(Query.class), 
+            any(Update.class), 
+            any()
+        );
+    }
+
+    @Test
+    public void removeAsset_miss() {
+        String sheetId = "real-sheet-123";
+        String assetId = "asset-912";
+        BalanceSheet sheet = new BalanceSheet();
+        sheet.id = sheetId;
+        sheet.currency = "CAD";
+
+        when(this.operations.findAndModify(
+            any(Query.class), 
+            any(Update.class), 
+            any())
+        ).thenReturn(null);
+
+        boolean result = this.repository.removeAsset(sheetId, assetId);
+
+        assertThat(result).isFalse();
+        verify(this.operations).findAndModify(
+            any(Query.class), 
+            any(Update.class), 
+            any()
+        );
+    }
+
+    @Test
+    public void removeLiability() {
+        String sheetId = "real-sheet-123";
+        String liabilityId = "liability-912";
+        BalanceSheet sheet = new BalanceSheet();
+        sheet.id = sheetId;
+        sheet.currency = "CAD";
+
+        when(this.operations.findAndModify(
+            any(Query.class), 
+            any(Update.class), 
+            any())
+        ).thenReturn(sheet);
+
+        boolean result = this.repository.removeLiability(sheetId, liabilityId);
+
+        assertThat(result).isTrue();
+        verify(this.operations).findAndModify(
+            any(Query.class), 
+            any(Update.class), 
+            any()
+        );
+    }
+
+    @Test
+    public void removeLiability_miss() {
+        String sheetId = "real-sheet-123";
+        String liabilityId = "liability-912";
+        BalanceSheet sheet = new BalanceSheet();
+        sheet.id = sheetId;
+        sheet.currency = "CAD";
+
+        when(this.operations.findAndModify(
+            any(Query.class), 
+            any(Update.class), 
+            any())
+        ).thenReturn(null);
+
+        boolean result = this.repository.removeLiability(sheetId, liabilityId);
+
+        assertThat(result).isFalse();
+        verify(this.operations).findAndModify(
+            any(Query.class), 
+            any(Update.class), 
             any()
         );
     }
