@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/main.js",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/efredin/networth/networth-web.git"
+  },
   "scripts": {
     "build": "webpack --mode production",
     "clean": "rimraf ./dist",

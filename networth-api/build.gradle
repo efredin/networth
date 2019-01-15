@@ -17,7 +17,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jacoco'
 
 bootJar {
-    baseName = 'gs-spring-boot'
+    baseName = 'efredin-networth-api'
     version =  '0.1.0'
 }
 

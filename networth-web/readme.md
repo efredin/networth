@@ -6,9 +6,14 @@ A simple react front-end for the net worth case study
 npm install
 ```
 
-## Running
+## Running Locally
 ```
 npm run start
+```
+
+## Docker
+```
+npm run build && docker build -t efredin/networth-web:latest
 ```
 
 ## Notes

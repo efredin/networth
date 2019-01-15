@@ -11,13 +11,14 @@ import org.springframework.context.annotation.Bean;
 @EnableCaching
 public class Application {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		// fire it up
 		SpringApplication.run(Application.class, args);
 	}
 
 	@Bean
 	public BalanceSheetRepository balanceSheetRepository() {
-		return new BalanceSheetRepository();
+        return new BalanceSheetRepository();
 	}
 }
 

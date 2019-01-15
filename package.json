@@ -1,0 +1,27 @@
+{
+  "name": "networth",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/efredin/networth.git"
+  },
+  "scripts": {
+    "build": "npm run build:web && npm run build:api",
+    "build:web": "cd networth-web && npm run build",
+    "build:api": "cd networth-api && gradlew.bat build",
+    "build:docker": "docker-compose build",
+    "clean": "npm run clean:web && npm run clean:api",
+    "clean:web": "cd networth-web && npm run clean",
+    "clean:api": "cd networth-api && gradlew.bat clean",
+    "install": "cd networth-web && npm install",
+    "lint": "cd networth-web && tslint --project ./tslint.json",
+    "start": "npm run start:web && npm run start:api",
+    "start:web": "cd networth-web && npm run start",
+    "start:api": "cd networth-api && gradlew.bat bootRun",
+    "start:docker": "docker-compose up",
+    "test": "cd networth-api && gradlew.bat test"
+  },
+  "author": "Eric Fredin <efredin@gmail.com>",
+  "license": "ISC"
+}
